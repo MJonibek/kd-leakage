@@ -1,0 +1,51 @@
+# ---------------------------------------------------------------------------
+# Shared by both projects in this repo (backdoor-leakage/, benchmark-leakage/).
+#
+# Patterns that used to be anchored to a single folder (they lived in that
+# folder's own .gitignore) are written with a leading `**/` here so they still
+# match at any depth.
+#
+# NOTE: `*` does not cross a `/`, so `**/data/*.jsonl` matches a stray dump in
+# `<project>/data/` but NOT the curated sets committed under
+# `backdoor-leakage/data/{train,test,numseq}/`. That is deliberate — those are
+# inputs, not artifacts.
+# ---------------------------------------------------------------------------
+
+# Local credentials / machine-specific settings
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Virtualenvs
+.venv/
+venv/
+
+# --- Generated artifacts ----------------------------------------------------
+# All reproducible from the pipelines. Tens of GB; deliberately not distributed
+# with the code.
+
+# benchmark-leakage (run_pipeline.sh / eval.sh)
+**/data/*.jsonl
+**/data/*.h5
+teachers/
+students/
+eval_outputs/
+
+# backdoor-leakage (train_teacher.py → save_* → train_student.py → evaluate*)
+logits/
+sequences/
+asr_results/
+teacher_*/
+student_*/
+
+# Keep the dataset registry module that lives under each project's data/
+!**/data/__init__.py
+!**/data/datasets.py
+
+# Scratch
+*.log
+*.tmp

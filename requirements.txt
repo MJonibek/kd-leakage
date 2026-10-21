@@ -1,0 +1,49 @@
+# ---------------------------------------------------------------------------
+# Shared by both projects in this repo (backdoor-leakage/, benchmark-leakage/).
+#
+#   pip install -r requirements.txt            # from the repo root
+#   pip install -r ../requirements.txt         # from backdoor-leakage/
+#   pip install -r ../../requirements.txt      # from a kd-leakage-* variant
+#
+# The pinned block below is the environment that produced the reported
+# benchmark-leakage results: Python 3.12.12, CUDA 12.8, single 80GB-class GPU.
+#
+# torch is pinned to the +cu128 build; install it from the PyTorch index if
+# your platform needs a different CUDA build:
+#   pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cu128
+#
+# NOTE ON VERSION DRIFT: the evaluation runs span more than one torch release
+# (some earlier lm-eval result files were produced under torch 2.10). 2.8.0 is
+# the version the final runs used, and the only one the `foreach=False`
+# workaround in the Gemma student trainer was validated against. Metric
+# differences across these versions were not observed to be material, but exact
+# bitwise reproduction requires this pin.
+# ---------------------------------------------------------------------------
+
+# --- Core: used by both projects -------------------------------------------
+torch==2.8.0
+transformers==5.8.1
+trl==0.29.0
+datasets==4.7.0
+accelerate==1.13.0
+huggingface_hub==1.7.1
+safetensors==0.7.0
+h5py==3.16.0
+numpy==2.3.5
+tqdm==4.67.3
+scikit-learn==1.8.0
+loguru==0.7.3
+sentencepiece==0.2.1
+protobuf==6.33.6
+
+# --- benchmark-leakage ------------------------------------------------------
+# Evaluation harness (provides the `lm_eval` CLI used by eval.sh)
+lm-eval==0.4.11
+
+# --- backdoor-leakage -------------------------------------------------------
+# Not part of the pinned reproduction set above — no version was recorded for
+# these, so they are left open. Pin them if you need an exact rebuild.
+pandas          # dataset wrangling in evaluate.py / filter_refusals.py
+PyYAML          # config loading
+nltk            # stopword list for pay_attention_trigger/mine_trigger.py
+openai          # LLM-as-a-judge in judge_refusal.py (needs OPENAI_API_KEY)

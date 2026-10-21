@@ -1,0 +1,19 @@
+task: gpqa_main_letter
+dataset_path: Idavidrein/gpqa
+dataset_name: gpqa_main
+output_type: multiple_choice
+training_split: train
+# GPQA configs only ship a "train" split; lm-eval-harness uses test_split
+# to mean "the split to evaluate on". Scored in the chat-template + bare
+# letter format the teacher was actually fine-tuned on.
+test_split: train
+process_docs: !function utils.process_docs
+doc_to_text: !function utils.doc_to_text
+doc_to_target: !function utils.doc_to_target
+doc_to_choice: !function utils.doc_to_choice
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
